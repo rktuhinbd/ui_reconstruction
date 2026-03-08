@@ -8,20 +8,22 @@ abstract class SportsLocalDataSource {
   Future<Set<String>> getFavorites();
   Future<void> saveNotificationStatus(bool isEnabled);
   Future<bool> getNotificationStatus();
+  Future<void> saveNotifiedMatchIds(Set<String> matchIds);
+  Future<Set<String>> getNotifiedMatchIds();
 }
 
 class SportsLocalDataSourceImpl implements SportsLocalDataSource {
   final Box box;
   static const String CACHE_KEY = 'SPORTS_CACHE';
   static const String FAVORITES_KEY = 'FAVORITES_CACHE';
-  static const String NOTIFICATION_KEY = 'NOTIFICATION_CACHE';
+  static const String NOTIFICATION_PERMISSION_KEY = 'NOTIFICATION_PERMISSION_CACHE';
+  static const String NOTIFIED_MATCHES_KEY = 'NOTIFIED_MATCHES_CACHE';
 
   SportsLocalDataSourceImpl(this.box);
 
   @override
   Future<void> cacheMatches(List<MatchEventModel> matches) async {
     // In a real app, we'd store the actual JSON or use a TypeAdapter.
-    // For this reconstruction, we'll keep it simple.
   }
 
   @override
@@ -42,11 +44,22 @@ class SportsLocalDataSourceImpl implements SportsLocalDataSource {
 
   @override
   Future<void> saveNotificationStatus(bool isEnabled) async {
-    await box.put(NOTIFICATION_KEY, isEnabled);
+    await box.put(NOTIFICATION_PERMISSION_KEY, isEnabled);
   }
 
   @override
   Future<bool> getNotificationStatus() async {
-    return box.get(NOTIFICATION_KEY, defaultValue: false);
+    return box.get(NOTIFICATION_PERMISSION_KEY, defaultValue: false);
+  }
+
+  @override
+  Future<void> saveNotifiedMatchIds(Set<String> matchIds) async {
+    await box.put(NOTIFIED_MATCHES_KEY, matchIds.toList());
+  }
+
+  @override
+  Future<Set<String>> getNotifiedMatchIds() async {
+    final List<dynamic>? list = box.get(NOTIFIED_MATCHES_KEY);
+    return list?.map((e) => e.toString()).toSet() ?? {};
   }
 }

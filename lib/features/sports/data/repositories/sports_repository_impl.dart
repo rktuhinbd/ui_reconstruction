@@ -63,4 +63,14 @@ class SportsRepositoryImpl implements SportsRepository {
   Future<bool> getNotificationStatus() async {
     return await localDataSource.getNotificationStatus();
   }
+
+  @override
+  Future<void> saveNotifiedMatchIds(Set<String> matchIds) async {
+    await localDataSource.saveNotifiedMatchIds(matchIds);
+  }
+
+  @override
+  Future<Set<String>> getNotifiedMatchIds() async {
+    return await localDataSource.getNotifiedMatchIds();
+  }
 }

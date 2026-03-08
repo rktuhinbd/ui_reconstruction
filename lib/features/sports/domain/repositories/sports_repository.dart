@@ -10,4 +10,6 @@ abstract class SportsRepository {
   Future<Set<String>> getFavorites();
   Future<void> saveNotificationStatus(bool isEnabled);
   Future<bool> getNotificationStatus();
+  Future<void> saveNotifiedMatchIds(Set<String> matchIds);
+  Future<Set<String>> getNotifiedMatchIds();
 }

@@ -44,7 +44,12 @@ class ChangeTab extends SportsEvent {
   List<Object?> get props => [tabIndex];
 }
 
-class RequestNotificationPermission extends SportsEvent {}
+class ToggleMatchNotification extends SportsEvent {
+  final String matchId;
+  const ToggleMatchNotification(this.matchId);
+  @override
+  List<Object?> get props => [matchId];
+}
 
 class ToggleFavorite extends SportsEvent {
   final String matchId;
@@ -73,6 +78,7 @@ class SportsLoaded extends SportsState {
   final DateTime selectedDate;
   final bool isNotificationEnabled;
   final Set<String> favoriteMatchIds;
+  final Set<String> notifiedMatchIds;
 
   const SportsLoaded({
     required this.liveMatches,
@@ -83,6 +89,7 @@ class SportsLoaded extends SportsState {
     required this.selectedDate,
     this.isNotificationEnabled = false,
     this.favoriteMatchIds = const {},
+    this.notifiedMatchIds = const {},
   });
 
   @override
@@ -94,7 +101,8 @@ class SportsLoaded extends SportsState {
     selectedTab, 
     selectedDate, 
     isNotificationEnabled, 
-    favoriteMatchIds
+    favoriteMatchIds,
+    notifiedMatchIds,
   ];
 
   SportsLoaded copyWith({
@@ -106,6 +114,7 @@ class SportsLoaded extends SportsState {
     DateTime? selectedDate,
     bool? isNotificationEnabled,
     Set<String>? favoriteMatchIds,
+    Set<String>? notifiedMatchIds,
   }) {
     return SportsLoaded(
       liveMatches: liveMatches ?? this.liveMatches,
@@ -116,6 +125,7 @@ class SportsLoaded extends SportsState {
       selectedDate: selectedDate ?? this.selectedDate,
       isNotificationEnabled: isNotificationEnabled ?? this.isNotificationEnabled,
       favoriteMatchIds: favoriteMatchIds ?? this.favoriteMatchIds,
+      notifiedMatchIds: notifiedMatchIds ?? this.notifiedMatchIds,
     );
   }
 }
@@ -135,7 +145,7 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
     on<LoadInitialData>(_onLoadInitialData);
     on<LoadMatchesByDate>(_onLoadMatchesByDate);
     on<ChangeTab>(_onTabChanged);
-    on<RequestNotificationPermission>(_onNotificationRequested);
+    on<ToggleMatchNotification>(_onToggleMatchNotification);
     on<ToggleFavorite>(_onToggleFavorite);
   }
 
@@ -150,10 +160,11 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
     final List<MatchEvent> scheduledRes = scheduledResult.fold((_) => [], (m) => m);
 
     // Load persistent state
-    final isNotifEnabled = await repository.getNotificationStatus();
+    final isNotifPermissionEnabled = await repository.getNotificationStatus();
     final favorites = await repository.getFavorites();
+    final notifiedMatches = await repository.getNotifiedMatchIds();
 
-    // Mock player data for UI-6 with corrected photo URLs
+    // Mock player data for UI-6 with corrected photo URLs mapping to provided filenames
     final List<PlayerStat> players = [
       const PlayerStat(name: 'Tim Seifert', photoUrl: 'assets/images/players/tim_seifert.png', runs: '333', strikeRate: '124.7'),
       const PlayerStat(name: 'Rahmanullah Gurbaz', photoUrl: 'assets/images/players/rahmanullah_gurbaz.png', runs: '320', strikeRate: '135.2'),
@@ -162,8 +173,6 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
       const PlayerStat(name: 'Jacob Bethell', photoUrl: 'assets/images/players/jacob_bethell.png', runs: '285', strikeRate: '128.3'),
     ];
 
-    // Build "My Games" list from favorites across all mock data if necessary, 
-    // or just filter from available ones. For reconstruction, we'll filter live and scheduled.
     final List<MatchEvent> allAvailable = [...liveRes, ...scheduledRes];
     final List<MatchEvent> myGamesRes = allAvailable.where((m) => favorites.contains(m.id)).toList();
 
@@ -173,8 +182,9 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
       myGames: myGamesRes,
       topPlayers: players,
       selectedDate: initialDate,
-      isNotificationEnabled: isNotifEnabled,
+      isNotificationEnabled: isNotifPermissionEnabled,
       favoriteMatchIds: favorites,
+      notifiedMatchIds: notifiedMatches,
     ));
   }
 
@@ -199,13 +209,28 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
     }
   }
 
-  Future<void> _onNotificationRequested(RequestNotificationPermission event, Emitter<SportsState> emit) async {
+  Future<void> _onToggleMatchNotification(ToggleMatchNotification event, Emitter<SportsState> emit) async {
     if (state is SportsLoaded) {
       final currentState = state as SportsLoaded;
-      // Simulate permission taking
-      final newStatus = !currentState.isNotificationEnabled;
-      await repository.saveNotificationStatus(newStatus);
-      emit(currentState.copyWith(isNotificationEnabled: newStatus));
+      
+      // If permission is not granted, "grant" it first as requested.
+      if (!currentState.isNotificationEnabled) {
+        await repository.saveNotificationStatus(true);
+        // JUST grant permission on the first tap, as requested.
+        emit(currentState.copyWith(isNotificationEnabled: true));
+        return;
+      }
+
+      // Once permission is granted, subsequent taps toggle this specific match.
+      final newNotified = Set<String>.from(currentState.notifiedMatchIds);
+      if (newNotified.contains(event.matchId)) {
+        newNotified.remove(event.matchId);
+      } else {
+        newNotified.add(event.matchId);
+      }
+      
+      await repository.saveNotifiedMatchIds(newNotified);
+      emit(currentState.copyWith(notifiedMatchIds: newNotified));
     }
   }
 
@@ -222,7 +247,6 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
       
       await repository.saveFavorites(newFavorites);
 
-      // Re-filter My Games
       final allAvailable = [...currentState.liveMatches, ...currentState.scheduledMatches];
       final myGamesRes = allAvailable.where((m) => newFavorites.contains(m.id)).toList();
 

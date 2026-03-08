@@ -16,11 +16,11 @@ class MatchCard extends StatelessWidget {
     return BlocBuilder<SportsBloc, SportsState>(
       builder: (context, state) {
         bool isFavorited = false;
-        bool isNotifEnabled = false;
+        bool isNotified = false;
 
         if (state is SportsLoaded) {
           isFavorited = state.favoriteMatchIds.contains(match.id);
-          isNotifEnabled = state.isNotificationEnabled;
+          isNotified = state.notifiedMatchIds.contains(match.id);
         }
 
         return Container(
@@ -56,11 +56,11 @@ class MatchCard extends StatelessWidget {
                     const SizedBox(width: 12),
                   ],
                   GestureDetector(
-                    onTap: () => context.read<SportsBloc>().add(RequestNotificationPermission()),
+                    onTap: () => context.read<SportsBloc>().add(ToggleMatchNotification(match.id)),
                     child: Icon(
-                      isNotifEnabled ? Icons.notifications : Icons.notifications_none, 
+                      isNotified ? Icons.notifications : Icons.notifications_none, 
                       size: 18, 
-                      color: isNotifEnabled ? const Color(0xFFFFD700) : AppColors.textLight
+                      color: isNotified ? const Color(0xFFFFD700) : AppColors.textLight
                     ),
                   ),
                   const SizedBox(width: 12),
