@@ -43,4 +43,24 @@ class SportsRepositoryImpl implements SportsRepository {
       return const Left(ServerFailure());
     }
   }
+
+  @override
+  Future<void> saveFavorites(Set<String> matchIds) async {
+    await localDataSource.saveFavorites(matchIds);
+  }
+
+  @override
+  Future<Set<String>> getFavorites() async {
+    return await localDataSource.getFavorites();
+  }
+
+  @override
+  Future<void> saveNotificationStatus(bool isEnabled) async {
+    await localDataSource.saveNotificationStatus(isEnabled);
+  }
+
+  @override
+  Future<bool> getNotificationStatus() async {
+    return await localDataSource.getNotificationStatus();
+  }
 }

@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => di.sl<SportsBloc>()..add(LoadLiveMatches()),
+      create: (context) => di.sl<SportsBloc>()..add(LoadInitialData()),
       child: MaterialApp(
         title: 'Sports UI Reconstruction',
         debugShowCheckedModeBanner: false,
