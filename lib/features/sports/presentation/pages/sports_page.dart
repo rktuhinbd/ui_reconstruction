@@ -6,8 +6,45 @@ import '../bloc/sports_bloc.dart';
 import '../widgets/date_selector.dart';
 import '../widgets/match_card.dart';
 
-class SportsPage extends StatelessWidget {
+class SportsPage extends StatefulWidget {
   const SportsPage({super.key});
+
+  @override
+  State<SportsPage> createState() => _SportsPageState();
+}
+
+class _SportsPageState extends State<SportsPage> {
+  late ScrollController _scrollController;
+  bool _isAppBarCollapsed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.hasClients && _scrollController.offset > (220 - kToolbarHeight)) {
+      if (!_isAppBarCollapsed) {
+        setState(() {
+          _isAppBarCollapsed = true;
+        });
+      }
+    } else {
+      if (_isAppBarCollapsed) {
+        setState(() {
+          _isAppBarCollapsed = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +60,21 @@ class SportsPage extends StatelessWidget {
           }
 
           if (state is SportsLoaded) {
+            final iconColor = _isAppBarCollapsed ? AppColors.primaryBlue : Colors.white;
+            final appBarColor = _isAppBarCollapsed ? Colors.white : Colors.transparent;
+
             return DefaultTabController(
               length: 3,
               initialIndex: state.selectedTab,
               child: NestedScrollView(
+                controller: _scrollController,
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
                       expandedHeight: 220,
                       pinned: true,
+                      elevation: _isAppBarCollapsed ? 2 : 0,
+                      backgroundColor: appBarColor,
                       flexibleSpace: FlexibleSpaceBar(
                         background: Stack(
                           fit: StackFit.expand,
@@ -72,12 +115,12 @@ class SportsPage extends StatelessWidget {
                         ),
                       ),
                       leading: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        icon: Icon(Icons.arrow_back, color: iconColor),
                         onPressed: () {},
                       ),
                       actions: [
                         IconButton(
-                          icon: const Icon(Icons.search, color: Colors.white),
+                          icon: Icon(Icons.search, color: iconColor),
                           onPressed: () {},
                         ),
                       ],
@@ -90,7 +133,8 @@ class SportsPage extends StatelessWidget {
                           child: Column(
                             children: [
                               Container(
-                                margin: const EdgeInsets.all(16),
+                                height: 42,
+                                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   color: AppColors.tabBackground,
@@ -116,7 +160,7 @@ class SportsPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        88,
+                        60,
                       ),
                     ),
                   ];
@@ -154,9 +198,22 @@ class _ScheduleTab extends StatelessWidget {
           onDateSelected: (date) => context.read<SportsBloc>().add(LoadMatchesByDate(date)),
         ),
         if (state.liveMatches.isNotEmpty) ...[
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: Text('Live events', style: AppTypography.h3),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: Row(
+              children: [
+                const Text('Live events', style: AppTypography.h3),
+                const SizedBox(width: 8),
+                Container(
+                  width: 8, // User's manual tweak
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
           ),
           ...state.liveMatches.map((m) => MatchCard(match: m, isLive: true)).toList(),
         ],
@@ -300,6 +357,6 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }

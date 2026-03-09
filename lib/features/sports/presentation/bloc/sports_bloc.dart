@@ -153,7 +153,8 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
     emit(SportsLoading());
     
     final liveResult = await repository.getLiveMatches();
-    final initialDate = DateTime(2026, 2, 18);
+    final now = DateTime.now();
+    final initialDate = DateTime(now.year, now.month, now.day);
     final scheduledResult = await repository.getMatchesByDate(initialDate);
     
     final List<MatchEvent> liveRes = liveResult.fold((_) => [], (m) => m);

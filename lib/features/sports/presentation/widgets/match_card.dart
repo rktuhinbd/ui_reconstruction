@@ -41,65 +41,70 @@ class MatchCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset('assets/images/trophy_icon.png.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Image.asset('assets/images/trophy_icon.png.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      match.tournamentName,
-                      style: AppTypography.labelSmall.copyWith(fontSize: 12),
-                      overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          match.tournamentName,
+                          style: AppTypography.labelSmall.copyWith(fontSize: 12, fontWeight: FontWeight.bold),
+                          softWrap: true,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          match.tournamentGroup, 
+                          style: AppTypography.labelSmall.copyWith(fontSize: 10, color: AppColors.textLight),
+                        ),
+                      ],
                     ),
                   ),
+                  const SizedBox(width: 8),
                   if (isLive) ...[
-                    const Icon(Icons.play_circle_outline, size: 18, color: AppColors.primaryBlue),
-                    const SizedBox(width: 12),
+                    _CircularIconButton(
+                      icon: Icons.play_arrow,
+                      color: AppColors.primaryBlue,
+                      onTap: () {},
+                    ),
+                    const SizedBox(width: 8),
                   ],
-                  GestureDetector(
+                  _CircularIconButton(
+                    icon: isNotified ? Icons.notifications : Icons.notifications_none,
+                    color: isNotified ? const Color(0xFFFFD700) : AppColors.textLight,
                     onTap: () => context.read<SportsBloc>().add(ToggleMatchNotification(match.id)),
-                    child: Icon(
-                      isNotified ? Icons.notifications : Icons.notifications_none, 
-                      size: 18, 
-                      color: isNotified ? const Color(0xFFFFD700) : AppColors.textLight
-                    ),
                   ),
-                  const SizedBox(width: 12),
-                  GestureDetector(
+                  const SizedBox(width: 8),
+                  _CircularIconButton(
+                    icon: isFavorited ? Icons.star : Icons.star_border,
+                    color: isFavorited ? const Color(0xFFFFD700) : AppColors.textLight,
                     onTap: () => context.read<SportsBloc>().add(ToggleFavorite(match.id)),
-                    child: Icon(
-                      isFavorited ? Icons.star : Icons.star_border, 
-                      size: 18, 
-                      color: isFavorited ? const Color(0xFFFFD700) : AppColors.textLight
-                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
-              Text(match.tournamentGroup, style: AppTypography.labelSmall),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: _TeamRow(
-                      name: match.homeTeam.name,
-                      logoUrl: match.homeTeam.logoUrl,
-                      score: match.homeScore,
-                    ),
-                  ),
-                ],
+              // Match Type Label (T20) - 14px exactly above the flag
+              const Text(
+                'T20', 
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textLight),
+              ),
+              const SizedBox(height: 4),
+              _TeamRow(
+                name: match.homeTeam.name,
+                logoUrl: match.homeTeam.logoUrl,
+                score: match.homeScore,
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _TeamRow(
-                      name: match.awayTeam.name,
-                      logoUrl: match.awayTeam.logoUrl,
-                      score: match.awayScore,
-                      subtitle: match.matchTime,
-                    ),
-                  ),
-                ],
+              _TeamRow(
+                name: match.awayTeam.name,
+                logoUrl: match.awayTeam.logoUrl,
+                score: match.awayScore,
+                subtitle: match.matchTime,
               ),
               if (match.odds1X2 != null) ...[
                 const SizedBox(height: 16),
@@ -123,6 +128,29 @@ class MatchCard extends StatelessWidget {
   }
 }
 
+class _CircularIconButton extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _CircularIconButton({required this.icon, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.scaffoldBackground,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, size: 18, color: color),
+      ),
+    );
+  }
+}
+
 class _TeamRow extends StatelessWidget {
   final String name;
   final String logoUrl;
@@ -133,6 +161,15 @@ class _TeamRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Single line formatting: 28/0 (2.3 ov)
+    String scoreText = "";
+    if (score != null) {
+      scoreText = score!;
+      if (subtitle != null) {
+        scoreText += " ($subtitle)";
+      }
+    }
+
     return Row(
       children: [
         CircleAvatar(
@@ -142,17 +179,10 @@ class _TeamRow extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: Text(name, style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.w600)),
+          child: Text(name, style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.w600, fontSize: 14)),
         ),
-        if (score != null)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(score!, style: AppTypography.h3),
-              if (subtitle != null)
-                Text(subtitle!, style: AppTypography.labelSmall),
-            ],
-          ),
+        if (scoreText.isNotEmpty)
+          Text(scoreText, style: AppTypography.h3.copyWith(fontSize: 14)),
       ],
     );
   }
