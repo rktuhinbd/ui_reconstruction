@@ -238,8 +238,6 @@ class _UpcomingMatchContent extends StatelessWidget {
         ),
         if (match.odds1X2 != null) ...[
           const SizedBox(height: 16),
-          const Divider(color: AppColors.border, height: 1),
-          const SizedBox(height: 16),
           Row(
             children: [
               _OddsButton(label: 'W1', value: match.odds1X2![0].toString()),
@@ -382,8 +380,6 @@ class _LiveMatchContent extends StatelessWidget {
           subtitle: match.matchTime,
         ),
         if (match.odds1X2 != null) ...[
-          const SizedBox(height: 16),
-          const Divider(color: AppColors.border, height: 1),
           const SizedBox(height: 16),
           Row(
             children: [

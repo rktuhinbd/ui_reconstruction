@@ -237,16 +237,130 @@ class _MyGamesTab extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.zero,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text('My matches', style: AppTypography.h3),
+        const SizedBox(height: 16),
+        // 1. Column { A card with 12px corner radius, match parent width, 12px padding inside, Row(...) }
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.cardBackground,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE0F2FE), // medium light blue
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.access_time, color: AppColors.primaryBlue, size: 20),
+                ),
+                const SizedBox(width: 16),
+                const Text(
+                  'My bets',
+                  style: TextStyle(
+                    color: Color(0xFF1E3A8A), // Dark blue
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        ...state.myGames.map((m) => MatchCard(match: m)),
-        if (state.myGames.isEmpty)
+        const SizedBox(height: 16),
+        // Text(My teams, 24sp, medium, Dark Blue)
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'My teams',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF1E3A8A), // Dark Blue
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Scrollable Row( Icon(Filter Change...), County Flags List Icons(48px) )
+        SizedBox(
+          height: 60,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Filter options clicked'), duration: Duration(seconds: 1)),
+                  );
+                },
+                child: Center(
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.tabBackground,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.filter_list, size: 24, color: AppColors.textPrimary),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              ...['ind.png', 'sa.png', 'nz.png', 'wi.png', 'pk.png'].map((flag) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      color: AppColors.tabBackground,
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/flags/$flag',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.flag, size: 24, color: AppColors.textSecondary),
+                      ),
+                    ),
+                  ),
+                ),
+              )),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        // Text(Team's Match)
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            "Team's Match",
+            style: AppTypography.h3,
+          ),
+        ),
+        const SizedBox(height: 12),
+        // 2 match card like current date's pre-match info card
+        if (state.scheduledMatches.isNotEmpty)
+          ...state.scheduledMatches.take(2).map((m) => MatchCard(match: m)),
+        if (state.scheduledMatches.isEmpty)
           const Center(
             child: Padding(
               padding: EdgeInsets.all(32.0),
-              child: Text('No saved games found', style: TextStyle(color: AppColors.textSecondary)),
+              child: Text('No team matches found', style: TextStyle(color: AppColors.textSecondary)),
             ),
           ),
         const SizedBox(height: 16),
