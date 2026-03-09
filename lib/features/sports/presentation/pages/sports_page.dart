@@ -43,7 +43,7 @@ class _SportsPageState extends State<SportsPage> {
   @override
   void dispose() {
     _scrollController.dispose();
-    super.initState();
+    super.dispose();
   }
 
   @override
@@ -215,13 +215,13 @@ class _ScheduleTab extends StatelessWidget {
               ],
             ),
           ),
-          ...state.liveMatches.map((m) => MatchCard(match: m, isLive: true)).toList(),
+          ...state.liveMatches.map((m) => MatchCard(match: m, isLive: true)),
         ],
         const Padding(
           padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
           child: Text('Pre-match events', style: AppTypography.h3),
         ),
-        ...state.scheduledMatches.map((m) => MatchCard(match: m)).toList(),
+        ...state.scheduledMatches.map((m) => MatchCard(match: m)),
         const SizedBox(height: 16),
       ],
     );
@@ -241,7 +241,7 @@ class _MyGamesTab extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Text('My matches', style: AppTypography.h3),
         ),
-        ...state.myGames.map((m) => MatchCard(match: m)).toList(),
+        ...state.myGames.map((m) => MatchCard(match: m)),
         if (state.myGames.isEmpty)
           const Center(
             child: Padding(
@@ -272,7 +272,7 @@ class _StatisticsTab extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        ...state.topPlayers.map((player) => _PlayerStatCard(player: player)).toList(),
+        ...state.topPlayers.map((player) => _PlayerStatCard(player: player)),
         const SizedBox(height: 16),
       ],
     );

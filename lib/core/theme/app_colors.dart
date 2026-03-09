@@ -29,4 +29,8 @@ class AppColors {
   
   // Border colors
   static const Color border = Color(0xFFE2E8F0);
+
+  // Countdown colors
+  static const Color countdownBackground = Color(0xFFE0F2FE);
+  static const Color countdownText = Color(0xFF0369A1);
 }
