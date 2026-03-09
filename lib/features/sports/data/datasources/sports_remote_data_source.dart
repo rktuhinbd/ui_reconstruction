@@ -29,10 +29,29 @@ class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
 
   @override
   Future<List<MatchEventModel>> getMatchesByDate(DateTime date) async {
-    // Generate matches dynamically based on the requested date to ensure "Pre-match data" is never missing
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final isPastDate = date.isBefore(today);
+
     final year = date.year;
     final month = date.month;
     final day = date.day;
+
+    if (isPastDate) {
+      return [
+        MatchEventModel(
+          id: '${day}_m1',
+          tournamentName: 'T20 World Cup. 2026. Group stage.',
+          tournamentGroup: 'Group D',
+          startTime: DateTime(year, month, day, 19, 0),
+          homeTeam: const Team(name: 'New Zealand', logoUrl: 'assets/flags/nz.png'),
+          awayTeam: const Team(name: 'Afghanistan', logoUrl: 'assets/flags/afg.png'),
+          homeScore: '170/07',
+          awayScore: '165/10',
+          status: MatchStatus.finished,
+        ),
+      ];
+    }
 
     return [
       MatchEventModel(

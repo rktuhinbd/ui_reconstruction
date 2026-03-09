@@ -27,6 +27,7 @@ class MatchCard extends StatelessWidget {
         }
 
         final bool isUpcoming = match.status == MatchStatus.upcoming;
+        final bool isFinished = match.status == MatchStatus.finished;
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -49,14 +50,105 @@ class MatchCard extends StatelessWidget {
                 isNotified: isNotified,
                 selectedDate: selectedDate,
               )
-            : _LiveMatchContent(
-                match: match, 
-                isFavorited: isFavorited, 
-                isNotified: isNotified, 
-                isLive: isLive,
-              ),
+            : isFinished
+                ? _FinishedMatchContent(match: match)
+                : _LiveMatchContent(
+                    match: match, 
+                    isFavorited: isFavorited, 
+                    isNotified: isNotified, 
+                    isLive: isLive,
+                  ),
         );
       }
+    );
+  }
+}
+
+class _FinishedMatchContent extends StatelessWidget {
+  final MatchEvent match;
+
+  const _FinishedMatchContent({required this.match});
+
+  @override
+  Widget build(BuildContext context) {
+    final String formattedDate = DateFormat('dd.MM.yyyy (HH:mm)').format(match.startTime);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Top Header: Trophy + Title
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset('assets/images/trophy_icon.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+            const SizedBox(width: 4),
+            Text(
+              '${match.tournamentName}, ${match.startTime.year} ${match.tournamentGroup}',
+              style: AppTypography.labelSmall.copyWith(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        // Team 1 Row
+        Row(
+          children: [
+            Image.asset(match.homeTeam.logoUrl, height: 24, width: 24, errorBuilder: (_, __, ___) => const Icon(Icons.flag, size: 24)),
+            const SizedBox(width: 8),
+            Text(match.homeTeam.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+            const Spacer(),
+            Text(match.homeScore ?? '-', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        // Team 2 Row
+        Row(
+          children: [
+            Image.asset(match.awayTeam.logoUrl, height: 24, width: 24, errorBuilder: (_, __, ___) => const Icon(Icons.flag, size: 24)),
+            const SizedBox(width: 8),
+            Text(match.awayTeam.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+            const Spacer(),
+            Text(match.awayScore ?? '-', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        // Centered Date Row
+        Center(
+          child: Text(
+            formattedDate,
+            style: AppTypography.labelSmall.copyWith(color: AppColors.textLight, fontWeight: FontWeight.w500),
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Additional Info Row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Additional information',
+              style: TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w500),
+            ),
+            GestureDetector(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Showing additional information...')),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: AppColors.countdownBackground,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 16,
+                  color: AppColors.countdownText,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
