@@ -115,15 +115,15 @@ class _UpcomingMatchContent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(match.homeTeam.name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            Text(match.homeTeam.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
             const SizedBox(width: 8),
             Image.asset(match.homeTeam.logoUrl, height: 24, width: 24, errorBuilder: (_, __, ___) => const Icon(Icons.flag, size: 24)),
-            const SizedBox(width: 8),
+            const SizedBox(width: 16),
             const Text('VS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(width: 8),
+            const SizedBox(width: 16),
             Image.asset(match.awayTeam.logoUrl, height: 24, width: 24, errorBuilder: (_, __, ___) => const Icon(Icons.flag, size: 24)),
             const SizedBox(width: 8),
-            Text(match.awayTeam.name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            Text(match.awayTeam.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
           ],
         ),
         if (isCurrentDateSelected) ...[
@@ -178,7 +178,7 @@ class _CountdownCard extends StatelessWidget {
       child: Text(
         value,
         style: const TextStyle(
-          fontSize: 8,
+          fontSize: 12,
           fontWeight: FontWeight.bold,
           color: AppColors.countdownText,
         ),
