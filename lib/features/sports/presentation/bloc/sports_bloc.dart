@@ -161,15 +161,12 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
     final initialDate = DateTime(now.year, now.month, now.day);
     final scheduledResult = await repository.getMatchesByDate(initialDate);
     
-    final List<MatchEvent> liveRes = liveResult.fold((_) => [], (m) => m);
-    final List<MatchEvent> scheduledRes = scheduledResult.fold((_) => [], (m) => m);
-
     // Load persistent state
     final isNotifPermissionEnabled = await repository.getNotificationStatus();
     final favorites = await repository.getFavorites();
     final notifiedMatches = await repository.getNotifiedMatchIds();
 
-    // Mock player data for UI-6 with corrected photo URLs mapping to provided filenames
+    // Mock player data
     final List<PlayerStat> players = [
       const PlayerStat(name: 'Tim Seifert', photoUrl: 'assets/images/players/tim_seifert.png', runs: '333', strikeRate: '124.7'),
       const PlayerStat(name: 'Rahmanullah Gurbaz', photoUrl: 'assets/images/players/rahmanullah_gurbaz.png', runs: '320', strikeRate: '135.2'),
@@ -178,19 +175,30 @@ class SportsBloc extends Bloc<SportsEvent, SportsState> {
       const PlayerStat(name: 'Jacob Bethell', photoUrl: 'assets/images/players/jacob_bethell.png', runs: '285', strikeRate: '128.3'),
     ];
 
-    final List<MatchEvent> allAvailable = [...liveRes, ...scheduledRes];
-    final List<MatchEvent> myGamesRes = allAvailable.where((m) => favorites.contains(m.id)).toList();
+    // Handle results gracefully using fold
+    await liveResult.fold(
+      (failure) async => emit(SportsError(failure.message)),
+      (liveMatches) async {
+        await scheduledResult.fold(
+          (failure) async => emit(SportsError(failure.message)),
+          (scheduledMatches) async {
+            final List<MatchEvent> allAvailable = [...liveMatches, ...scheduledMatches];
+            final List<MatchEvent> myGamesRes = allAvailable.where((m) => favorites.contains(m.id)).toList();
 
-    emit(SportsLoaded(
-      liveMatches: liveRes,
-      scheduledMatches: scheduledRes,
-      myGames: myGamesRes,
-      topPlayers: players,
-      selectedDate: initialDate,
-      isNotificationEnabled: isNotifPermissionEnabled,
-      favoriteMatchIds: favorites,
-      notifiedMatchIds: notifiedMatches,
-    ));
+            emit(SportsLoaded(
+              liveMatches: liveMatches,
+              scheduledMatches: scheduledMatches,
+              myGames: myGamesRes,
+              topPlayers: players,
+              selectedDate: initialDate,
+              isNotificationEnabled: isNotifPermissionEnabled,
+              favoriteMatchIds: favorites,
+              notifiedMatchIds: notifiedMatches,
+            ));
+          },
+        );
+      },
+    );
   }
 
   Future<void> _onLoadMatchesByDate(LoadMatchesByDate event, Emitter<SportsState> emit) async {
