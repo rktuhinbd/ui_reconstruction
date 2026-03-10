@@ -66,13 +66,10 @@ This project leveraged **Antigravity (Google DeepMind)** as a sophisticated pair
    ```
 
 ## 📸 Screenshots
-<p align="center">
-  <img src="assets/screenshots/schedule_current_match_events.jpg" width="180" alt="Current Schedule"/>
-  <img src="assets/screenshots/schedule_upcoming_match_events.jpg" width="180" alt="Upcoming Schedule"/>
-  <img src="assets/screenshots/schedule_earlier_match_events.jpg" width="180" alt="Earlier Schedule"/>
-  <img src="assets/screenshots/my_games.jpg" width="180" alt="My Games"/>
-  <img src="assets/screenshots/player_statistics.jpg" width="180" alt="Statistics"/>
-</p>
+
+| Schedule (Today) | Schedule (Upcoming) | Schedule (Results) | My Games | Statistics |
+| :---: | :---: | :---: | :---: | :---: |
+| <img src="assets/screenshots/schedule_current_match_events.jpg" width="180" /> | <img src="assets/screenshots/schedule_upcoming_match_events.jpg" width="180" /> | <img src="assets/screenshots/schedule_earlier_match_events.jpg" width="180" /> | <img src="assets/screenshots/my_games.jpg" width="180" /> | <img src="assets/screenshots/player_statistics.jpg" width="180" /> |
 
 ## 📦 Release APK
 The project is built and optimized for release. You can download the latest APK here:
