@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../bloc/sports_bloc.dart';
@@ -25,7 +26,8 @@ class _SportsPageState extends State<SportsPage> {
   }
 
   void _scrollListener() {
-    if (_scrollController.hasClients && _scrollController.offset > (220 - kToolbarHeight)) {
+    if (_scrollController.hasClients &&
+        _scrollController.offset > (220 - kToolbarHeight)) {
       if (!_isAppBarCollapsed) {
         setState(() {
           _isAppBarCollapsed = true;
@@ -60,8 +62,12 @@ class _SportsPageState extends State<SportsPage> {
           }
 
           if (state is SportsLoaded) {
-            final iconColor = _isAppBarCollapsed ? AppColors.primaryBlue : Colors.white;
-            final appBarColor = _isAppBarCollapsed ? Colors.white : Colors.transparent;
+            final iconColor = _isAppBarCollapsed
+                ? AppColors.primaryBlue
+                : Colors.white;
+            final appBarColor = _isAppBarCollapsed
+                ? Colors.white
+                : Colors.transparent;
 
             return DefaultTabController(
               length: 3,
@@ -85,7 +91,10 @@ class _SportsPageState extends State<SportsPage> {
                               errorBuilder: (_, __, ___) => Container(
                                 decoration: const BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [Color(0xFF0F172A), Color(0xFF334155)],
+                                    colors: [
+                                      Color(0xFF0F172A),
+                                      Color(0xFF334155),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -134,14 +143,19 @@ class _SportsPageState extends State<SportsPage> {
                             children: [
                               Container(
                                 height: 42,
-                                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                   color: AppColors.tabBackground,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: TabBar(
-                                  onTap: (index) => context.read<SportsBloc>().add(ChangeTab(index)),
+                                  onTap: (index) => context
+                                      .read<SportsBloc>()
+                                      .add(ChangeTab(index)),
                                   dividerColor: Colors.transparent,
                                   indicator: BoxDecoration(
                                     color: AppColors.selectedTab,
@@ -195,7 +209,8 @@ class _ScheduleTab extends StatelessWidget {
       children: [
         DateSelector(
           selectedDate: state.selectedDate,
-          onDateSelected: (date) => context.read<SportsBloc>().add(LoadMatchesByDate(date)),
+          onDateSelected: (date) =>
+              context.read<SportsBloc>().add(LoadMatchesByDate(date)),
         ),
         if (state.liveMatches.isNotEmpty) ...[
           Padding(
@@ -230,6 +245,7 @@ class _ScheduleTab extends StatelessWidget {
 
 class _MyGamesTab extends StatelessWidget {
   final SportsLoaded state;
+
   const _MyGamesTab({required this.state});
 
   @override
@@ -264,7 +280,11 @@ class _MyGamesTab extends StatelessWidget {
                     color: Color(0xFFE0F2FE), // medium light blue
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.access_time, color: AppColors.primaryBlue, size: 20),
+                  child: const Icon(
+                    Icons.access_time,
+                    color: AppColors.primaryBlue,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 const Text(
@@ -283,14 +303,7 @@ class _MyGamesTab extends StatelessWidget {
         // Text(My teams, 24sp, medium, Dark Blue)
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'My teams',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF1E3A8A), // Dark Blue
-            ),
-          ),
+          child: Text('My teams', style: AppTypography.h3),
         ),
         const SizedBox(height: 12),
         // Scrollable Row( Icon(Filter Change...), County Flags List Icons(48px) )
@@ -303,7 +316,10 @@ class _MyGamesTab extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Filter options clicked'), duration: Duration(seconds: 1)),
+                    const SnackBar(
+                      content: Text('Filter options clicked'),
+                      duration: Duration(seconds: 1),
+                    ),
                   );
                 },
                 child: Center(
@@ -315,31 +331,42 @@ class _MyGamesTab extends StatelessWidget {
                       color: AppColors.tabBackground,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.filter_list, size: 24, color: AppColors.textPrimary),
+                    child: const Icon(
+                      Icons.filter_list,
+                      size: 24,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 8),
-              ...['ind.png', 'sa.png', 'nz.png', 'wi.png', 'pk.png'].map((flag) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    decoration: const BoxDecoration(
-                      color: AppColors.tabBackground,
-                      shape: BoxShape.circle,
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/flags/$flag',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.flag, size: 24, color: AppColors.textSecondary),
+              ...['ind.png', 'sa.png', 'nz.png', 'wi.png', 'pk.png'].map(
+                (flag) => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: const BoxDecoration(
+                        color: AppColors.tabBackground,
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/flags/$flag',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.flag,
+                                size: 24,
+                                color: AppColors.textSecondary,
+                              ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              )),
+              ),
             ],
           ),
         ),
@@ -347,10 +374,7 @@ class _MyGamesTab extends StatelessWidget {
         // Text(Team's Match)
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            "Team's Match",
-            style: AppTypography.h3,
-          ),
+          child: Text("Team's Match", style: AppTypography.h3),
         ),
         const SizedBox(height: 12),
         // 2 match card like current date's pre-match info card
@@ -360,7 +384,10 @@ class _MyGamesTab extends StatelessWidget {
           const Center(
             child: Padding(
               padding: EdgeInsets.all(32.0),
-              child: Text('No team matches found', style: TextStyle(color: AppColors.textSecondary)),
+              child: Text(
+                'No team matches found',
+                style: TextStyle(color: AppColors.textSecondary),
+              ),
             ),
           ),
         const SizedBox(height: 16),
@@ -371,22 +398,99 @@ class _MyGamesTab extends StatelessWidget {
 
 class _StatisticsTab extends StatelessWidget {
   final SportsLoaded state;
+
   const _StatisticsTab({required this.state});
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.zero,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Top players', style: AppTypography.h3),
-            TextButton(onPressed: () {}, child: const Text('View all', style: TextStyle(color: AppColors.primaryBlue))),
-          ],
+        const SizedBox(height: 16),
+        // 1. A card with 12px corner radius, match parent width, 12px padding inside...
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.cardBackground,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Column{(Icon(calender) inside a circular medium light blue background of padding 8px), Text(Find out tea)ms rankings, 10sp}
+                Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE0F2FE), // medium light blue
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.calendar_today,
+                        color: AppColors.primaryBlue,
+                        size: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Standings',
+                      style: TextStyle(
+                        color: Color(0xFF1E3A8A), // Dark blue
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Find out teams rankings',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 16),
-        ...state.topPlayers.map((player) => _PlayerStatCard(player: player)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Top players', style: AppTypography.h3),
+              // Removed "View all" text button
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: state.topPlayers
+                .map((player) => _PlayerStatCard(player: player))
+                .toList(),
+          ),
+        ),
         const SizedBox(height: 16),
       ],
     );
@@ -395,6 +499,7 @@ class _StatisticsTab extends StatelessWidget {
 
 class _PlayerStatCard extends StatelessWidget {
   final PlayerStat player;
+
   const _PlayerStatCard({required this.player});
 
   @override
@@ -435,7 +540,12 @@ class _PlayerStatCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(player.name, style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  player.name,
+                  style: AppTypography.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const Text('New Zealand', style: AppTypography.labelSmall),
               ],
             ),
@@ -443,7 +553,13 @@ class _PlayerStatCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(player.runs, style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+              Text(
+                player.runs,
+                style: AppTypography.bodyLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
               Text('SR ${player.strikeRate}', style: AppTypography.labelSmall),
             ],
           ),
@@ -461,11 +577,16 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   double get minExtent => height;
+
   @override
   double get maxExtent => height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return child;
   }
 
