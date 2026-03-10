@@ -49,7 +49,7 @@ This project leveraged **Antigravity (Google DeepMind)** as a sophisticated pair
 ## 🏃 How to Run
 1. **Clone the Repo**:
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/rktuhinbd/ui_reconstruction.git
    cd ui_reconstruction
    ```
 2. **Get Dependencies**:
@@ -66,14 +66,18 @@ This project leveraged **Antigravity (Google DeepMind)** as a sophisticated pair
    ```
 
 ## 📸 Screenshots
-| Schedule (Today) | Schedule (Past/Results) | My Games | Statistics |
-| :---: | :---: | :---: | :---: |
-| ![Schedule](assets/screenshots/schedule_current_match_events.jpg) | ![Results](assets/screenshots/schedule_earlier_match_events.jpg) | ![My Games](assets/screenshots/my_games.jpg) | ![Stats](assets/screenshots/player_statistics.jpg) |
+<p align="center">
+  <img src="assets/screenshots/schedule_current_match_events.jpg" width="180" alt="Current Schedule"/>
+  <img src="assets/screenshots/schedule_upcoming_match_events.jpg" width="180" alt="Upcoming Schedule"/>
+  <img src="assets/screenshots/schedule_earlier_match_events.jpg" width="180" alt="Earlier Schedule"/>
+  <img src="assets/screenshots/my_games.jpg" width="180" alt="My Games"/>
+  <img src="assets/screenshots/player_statistics.jpg" width="180" alt="Statistics"/>
+</p>
 
 ## 📦 Release APK
 The project is built and optimized for release. You can download the latest APK here:
 
-**[Download Release APK](https://example.com/download/ui_reconstruction_v1.apk)** *(Placeholder - Replace with actual link after upload)*
+**[⬇️ Download Release APK](https://github.com/rktuhinbd/ui_reconstruction/releases/latest/download/app-release.apk)**
 
 Alternatively, build it locally:
 ```bash
