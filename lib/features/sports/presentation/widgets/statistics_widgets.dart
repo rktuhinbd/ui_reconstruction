@@ -21,7 +21,7 @@ class StatisticsTab extends StatelessWidget {
           child: InfoCard(
             icon: Icons.calendar_today,
             title: 'Standings',
-            subtitle: 'Find out teams rankings',
+            subtitle: "Find out the team's ranking",
           ),
         ),
         const SizedBox(height: 16),
@@ -36,8 +36,11 @@ class StatisticsTab extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            children: state.topPlayers
-                .map((player) => PlayerStatCard(player: player))
+            children: state.topPlayers.asMap().entries
+                .map((entry) => PlayerStatCard(
+                      player: entry.value,
+                      index: entry.key + 1,
+                    ))
                 .toList(),
           ),
         ),
@@ -50,8 +53,9 @@ class StatisticsTab extends StatelessWidget {
 /// A card showing individual player rankings and metrics.
 class PlayerStatCard extends StatelessWidget {
   final PlayerStat player;
+  final int index;
 
-  const PlayerStatCard({super.key, required this.player});
+  const PlayerStatCard({super.key, required this.player, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +75,14 @@ class PlayerStatCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+          Text(
+            '$index',
+            style: AppTypography.h1.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(width: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(
@@ -86,14 +98,14 @@ class PlayerStatCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   player.name,
-                  style: AppTypography.bodyLarge.copyWith(
+                  style: AppTypography.bodyMedium.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -101,18 +113,32 @@ class PlayerStatCard extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                player.runs,
-                style: AppTypography.bodyLarge.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+          Container(
+            padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE0F2FE),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Run ${player.runs}',
+                  style: AppTypography.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryBlue,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-              Text('SR ${player.strikeRate}', style: AppTypography.labelSmall),
-            ],
+                Text(
+                  'S.R. ${player.strikeRate}',
+                  style: AppTypography.labelSmall.copyWith(
+                    color: AppColors.primaryBlue,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
