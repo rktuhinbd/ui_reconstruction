@@ -94,7 +94,7 @@ class _FinishedMatchContent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset('assets/images/trophy_icon.png.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+            Image.asset('assets/images/trophy_icon.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
             const SizedBox(width: 4),
             Text(
               '${match.tournamentName}, ${match.startTime.year} ${match.tournamentGroup}',
@@ -194,7 +194,7 @@ class _UpcomingMatchContent extends StatelessWidget {
       children: [
         Row(
           children: [
-            Image.asset('assets/images/trophy_icon.png.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+            Image.asset('assets/images/trophy_icon.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -218,6 +218,14 @@ class _UpcomingMatchContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'T20', 
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textLight),
+          ),
+        ),
+        const SizedBox(height: 4),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -333,7 +341,7 @@ class _LiveMatchContent extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: Image.asset('assets/images/trophy_icon.png.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+              child: Image.asset('assets/images/trophy_icon.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
             ),
             const SizedBox(width: 8),
             Expanded(

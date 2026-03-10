@@ -4,6 +4,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../bloc/sports_bloc.dart';
 import '../widgets/date_selector.dart';
 import '../widgets/match_card.dart';
+import 'common_widgets.dart';
 
 class ScheduleTab extends StatelessWidget {
   final SportsLoaded state;
@@ -27,14 +28,7 @@ class ScheduleTab extends StatelessWidget {
               children: [
                 const Text('Live events', style: AppTypography.h3),
                 const SizedBox(width: 8),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                const GlowingDot(),
               ],
             ),
           ),

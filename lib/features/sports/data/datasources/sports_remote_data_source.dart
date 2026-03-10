@@ -72,6 +72,7 @@ class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
         homeTeam: const Team(name: 'India', logoUrl: 'assets/flags/ind.png'),
         awayTeam: const Team(name: 'Netherlands', logoUrl: 'assets/flags/ned.png'),
         status: MatchStatus.upcoming,
+        odds1X2: [1.13, 20.5, 7.2],
       ),
     ];
   }
