@@ -29,35 +29,49 @@ class MatchCard extends StatelessWidget {
         final bool isUpcoming = match.status == MatchStatus.upcoming;
         final bool isFinished = match.status == MatchStatus.finished;
 
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.cardBackground,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+        return TweenAnimationBuilder<double>(
+          duration: const Duration(milliseconds: 500),
+          tween: Tween(begin: 0.0, end: 1.0),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Opacity(
+              opacity: value,
+              child: Transform.translate(
+                offset: Offset(0, 20 * (1 - value)),
+                child: child,
               ),
-            ],
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.cardBackground,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: isUpcoming 
+              ? _UpcomingMatchContent(
+                  match: match, 
+                  isFavorited: isFavorited, 
+                  isNotified: isNotified,
+                  selectedDate: selectedDate,
+                )
+              : isFinished
+                  ? _FinishedMatchContent(match: match)
+                  : _LiveMatchContent(
+                      match: match, 
+                      isFavorited: isFavorited, 
+                      isNotified: isNotified, 
+                      isLive: isLive,
+                    ),
           ),
-          child: isUpcoming 
-            ? _UpcomingMatchContent(
-                match: match, 
-                isFavorited: isFavorited, 
-                isNotified: isNotified,
-                selectedDate: selectedDate,
-              )
-            : isFinished
-                ? _FinishedMatchContent(match: match)
-                : _LiveMatchContent(
-                    match: match, 
-                    isFavorited: isFavorited, 
-                    isNotified: isNotified, 
-                    isLive: isLive,
-                  ),
         );
       }
     );
@@ -80,7 +94,7 @@ class _FinishedMatchContent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset('assets/images/trophy_icon.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
+            Image.asset('assets/images/trophy_icon.png.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
             const SizedBox(width: 4),
             Text(
               '${match.tournamentName}, ${match.startTime.year} ${match.tournamentGroup}',
