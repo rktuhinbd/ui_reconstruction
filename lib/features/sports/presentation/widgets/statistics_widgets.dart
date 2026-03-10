@@ -4,6 +4,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../bloc/sports_bloc.dart';
 import 'common_widgets.dart';
 
+/// Displays match standings (mocked) and top player statistics.
 class StatisticsTab extends StatelessWidget {
   final SportsLoaded state;
 
@@ -46,6 +47,7 @@ class StatisticsTab extends StatelessWidget {
   }
 }
 
+/// A card showing individual player rankings and metrics.
 class PlayerStatCard extends StatelessWidget {
   final PlayerStat player;
 

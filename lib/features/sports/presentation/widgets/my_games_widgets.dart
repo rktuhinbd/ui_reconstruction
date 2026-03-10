@@ -4,6 +4,7 @@ import '../bloc/sports_bloc.dart';
 import '../widgets/match_card.dart';
 import 'common_widgets.dart';
 
+/// Displays personalized content like favorite matches and a team filter.
 class MyGamesTab extends StatelessWidget {
   final SportsLoaded state;
 
@@ -57,6 +58,7 @@ class MyGamesTab extends StatelessWidget {
   }
 }
 
+/// A horizontal scrolling row of country flags used for filtering.
 class TeamFilterRow extends StatelessWidget {
   final List<String> flags;
   final VoidCallback onFilterTap;

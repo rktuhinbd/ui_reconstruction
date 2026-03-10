@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 
+/// A card showing an icon, a title, and an optional subtitle.
+/// Used for generic info displays like "My bets" or "Standings".
 class InfoCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -79,6 +81,7 @@ class InfoCard extends StatelessWidget {
   }
 }
 
+/// A standard section header text used across the application tabs.
 class SectionTitle extends StatelessWidget {
   final String title;
   final TextStyle? style;
@@ -103,6 +106,7 @@ class SectionTitle extends StatelessWidget {
   }
 }
 
+/// A red dot with a pulsing glow animation, used to indicate "Live" status.
 class GlowingDot extends StatefulWidget {
   final Color color;
   final double size;
@@ -164,6 +168,7 @@ class _GlowingDotState extends State<GlowingDot> with SingleTickerProviderStateM
   }
 }
 
+/// A persistent header delegate for slivers that hosts a custom widget.
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
   final double height;

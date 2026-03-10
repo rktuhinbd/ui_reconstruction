@@ -4,6 +4,7 @@ import '../../domain/entities/match_event.dart';
 import '../../domain/repositories/sports_repository.dart';
 
 // Domain entity for Player stats (added for UI-6)
+/// Data model for individual player statistics.
 class PlayerStat extends Equatable {
   final String name;
   final String photoUrl;
@@ -22,6 +23,7 @@ class PlayerStat extends Equatable {
 }
 
 // Events
+/// Base event for all sports-related actions.
 abstract class SportsEvent extends Equatable {
   const SportsEvent();
   @override
@@ -59,6 +61,7 @@ class ToggleFavorite extends SportsEvent {
 }
 
 // States
+/// Base state for the sports feature.
 abstract class SportsState extends Equatable {
   const SportsState();
   @override
@@ -69,6 +72,7 @@ class SportsInitial extends SportsState {}
 
 class SportsLoading extends SportsState {}
 
+/// The primary state containing all loaded sports data and UI preferences.
 class SportsLoaded extends SportsState {
   final List<MatchEvent> liveMatches;
   final List<MatchEvent> scheduledMatches;

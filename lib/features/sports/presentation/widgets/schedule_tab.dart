@@ -6,6 +6,7 @@ import '../widgets/date_selector.dart';
 import '../widgets/match_card.dart';
 import 'common_widgets.dart';
 
+/// Displays upcoming and live matches with a date selector.
 class ScheduleTab extends StatelessWidget {
   final SportsLoaded state;
 
@@ -35,7 +36,7 @@ class ScheduleTab extends StatelessWidget {
           ...state.liveMatches.map((m) => MatchCard(match: m, isLive: true)),
         ],
         const Padding(
-          padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
+          padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
           child: Text('Pre-match events', style: AppTypography.h3),
         ),
         ...state.scheduledMatches.map((m) => MatchCard(match: m)),

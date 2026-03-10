@@ -18,6 +18,10 @@ void main() async {
   runApp(const MyApp());
 }
 
+/// Root widget of the application.
+/// 
+/// Sets up the [BlocProvider] for the global [SportsBloc] and configures
+/// the base theme and home page.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

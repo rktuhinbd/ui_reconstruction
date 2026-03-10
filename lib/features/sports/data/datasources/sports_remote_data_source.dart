@@ -1,19 +1,26 @@
 import '../models/match_event_model.dart';
 import '../../domain/entities/match_event.dart';
 
+/// Abstract interface for fetching sports data from a remote source.
 abstract class SportsRemoteDataSource {
+  /// Fetches scheduled matches for a specific [date].
   Future<List<MatchEventModel>> getMatchesByDate(DateTime date);
+  
+  /// Fetches all currently live matches.
   Future<List<MatchEventModel>> getLiveMatches();
+  
+  /// Fetches matches relevant to the user's "My Games" section.
   Future<List<MatchEventModel>> getMyGames();
 }
 
+/// Implementation of [SportsRemoteDataSource] using mocked local data.
 class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
   @override
   Future<List<MatchEventModel>> getLiveMatches() async {
     return [
       MatchEventModel(
         id: '1',
-        tournamentName: 'T20 World Cup. 2026. Group stage.',
+        tournamentName: 'T20 World Cup, 2026. Group Stage',
         tournamentGroup: 'Group D',
         startTime: DateTime.now(),
         homeTeam: const Team(name: 'South Africa', logoUrl: 'assets/flags/sa.png'),
@@ -41,7 +48,7 @@ class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
       return [
         MatchEventModel(
           id: '${day}_m1',
-          tournamentName: 'T20 World Cup. 2026. Group stage.',
+          tournamentName: 'T20 World Cup, 2026. Group Stage',
           tournamentGroup: 'Group D',
           startTime: DateTime(year, month, day, 19, 0),
           homeTeam: const Team(name: 'New Zealand', logoUrl: 'assets/flags/nz.png'),
@@ -56,8 +63,8 @@ class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
     return [
       MatchEventModel(
         id: '${day}_m1',
-        tournamentName: 'T20 World Cup. 2026. Group stage. Group A',
-        tournamentGroup: '${day < 10 ? '0$day' : day}.${month < 10 ? '0$month' : month}.$year 15:30',
+        tournamentName: 'T20 World Cup, 2026. Group Stage',
+        tournamentGroup: 'Group A',
         startTime: DateTime(year, month, day, 15, 30),
         homeTeam: const Team(name: 'Pakistan', logoUrl: 'assets/flags/pk.png'),
         awayTeam: const Team(name: 'Namibia', logoUrl: 'assets/flags/na.png'),
@@ -66,8 +73,8 @@ class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
       ),
       MatchEventModel(
         id: '${day}_m2',
-        tournamentName: 'T20 World Cup. 2026. Group stage. Group A',
-        tournamentGroup: '${day < 10 ? '0$day' : day}.${month < 10 ? '0$month' : month}.$year 19:30',
+        tournamentName: 'T20 World Cup, 2026. Group Stage',
+        tournamentGroup: 'Group A',
         startTime: DateTime(year, month, day, 19, 30),
         homeTeam: const Team(name: 'India', logoUrl: 'assets/flags/ind.png'),
         awayTeam: const Team(name: 'Netherlands', logoUrl: 'assets/flags/ned.png'),
@@ -83,8 +90,8 @@ class SportsRemoteDataSourceImpl implements SportsRemoteDataSource {
     return [
       MatchEventModel(
         id: '${now.day}_m1',
-        tournamentName: 'T20 World Cup. 2026. Group stage. Group A',
-        tournamentGroup: 'Upcoming Match',
+        tournamentName: 'T20 World Cup, 2026. Group Stage',
+        tournamentGroup: 'Group A',
         startTime: DateTime(now.year, now.month, now.day, 15, 30),
         homeTeam: const Team(name: 'Pakistan', logoUrl: 'assets/flags/pk.png'),
         awayTeam: const Team(name: 'Namibia', logoUrl: 'assets/flags/na.png'),

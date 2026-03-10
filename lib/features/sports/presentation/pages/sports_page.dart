@@ -8,6 +8,10 @@ import '../widgets/schedule_tab.dart';
 import '../widgets/my_games_widgets.dart';
 import '../widgets/statistics_widgets.dart';
 
+/// The main dashboard page for sports information.
+/// 
+/// Realizes a collapsing toolbar effect with parallax background and 
+/// a tabbed view for "Schedule", "My games", and "Statistics".
 class SportsPage extends StatefulWidget {
   const SportsPage({super.key});
 

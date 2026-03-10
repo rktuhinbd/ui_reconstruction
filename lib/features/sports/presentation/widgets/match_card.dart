@@ -6,6 +6,12 @@ import '../../../../core/theme/app_typography.dart';
 import '../../domain/entities/match_event.dart';
 import '../bloc/sports_bloc.dart';
 
+/// A card widget that displays information for a sports match.
+/// 
+/// It handles three different states of a match:
+/// - [MatchStatus.live]: Displays real-time score and a red pulsing "Live" indicator.
+/// - [MatchStatus.upcoming]: Displays match start time, countdown, and odds if available.
+/// - [MatchStatus.finished]: Displays final score, match date, and "Additional Information" expands.
 class MatchCard extends StatelessWidget {
   final MatchEvent match;
   final bool isLive;
@@ -78,6 +84,7 @@ class MatchCard extends StatelessWidget {
   }
 }
 
+/// Content layout for a match that has concluded.
 class _FinishedMatchContent extends StatelessWidget {
   final MatchEvent match;
 
@@ -97,7 +104,7 @@ class _FinishedMatchContent extends StatelessWidget {
             Image.asset('assets/images/trophy_icon.png', height: 16, errorBuilder: (_, __, ___) => const Icon(Icons.emoji_events, size: 16, color: Colors.orange)),
             const SizedBox(width: 4),
             Text(
-              '${match.tournamentName}, ${match.startTime.year} ${match.tournamentGroup}',
+              '${match.tournamentName.trim().endsWith('.') ? match.tournamentName.trim() : '${match.tournamentName.trim()}.'} ${match.tournamentGroup.trim()}${match.tournamentGroup.trim().endsWith('.') ? '' : '.'}',
               style: AppTypography.labelSmall.copyWith(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
             ),
           ],
@@ -167,6 +174,7 @@ class _FinishedMatchContent extends StatelessWidget {
   }
 }
 
+/// Content layout for an upcoming match, including countdowns and favorite/notif buttons.
 class _UpcomingMatchContent extends StatelessWidget {
   final MatchEvent match;
   final bool isFavorited;
@@ -198,10 +206,8 @@ class _UpcomingMatchContent extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                '${match.tournamentName}, ${match.startTime.year}, Stage, ${match.tournamentGroup}',
+                '${match.tournamentName.trim().endsWith('.') ? match.tournamentName.trim() : '${match.tournamentName.trim()}.'} ${match.tournamentGroup.trim()}${match.tournamentGroup.trim().endsWith('.') ? '' : '.'}',
                 style: AppTypography.labelSmall.copyWith(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
             _CircularIconButton(
@@ -217,7 +223,7 @@ class _UpcomingMatchContent extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         const Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -318,6 +324,7 @@ class _CountdownSeparator extends StatelessWidget {
   }
 }
 
+/// Content layout for a match currently in progress.
 class _LiveMatchContent extends StatelessWidget {
   final MatchEvent match;
   final bool isFavorited;
@@ -345,20 +352,9 @@ class _LiveMatchContent extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    match.tournamentName,
-                    style: AppTypography.labelSmall.copyWith(fontSize: 12, fontWeight: FontWeight.bold),
-                    softWrap: true,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    match.tournamentGroup, 
-                    style: AppTypography.labelSmall.copyWith(fontSize: 10, color: AppColors.textLight),
-                  ),
-                ],
+              child: Text(
+                '${match.tournamentName.trim().endsWith('.') ? match.tournamentName.trim() : '${match.tournamentName.trim()}.'} ${match.tournamentGroup.trim()}${match.tournamentGroup.trim().endsWith('.') ? '' : '.'}',
+                style: AppTypography.labelSmall.copyWith(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
               ),
             ),
             const SizedBox(width: 8),
@@ -383,7 +379,7 @@ class _LiveMatchContent extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         const Text(
           'T20', 
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textLight),
@@ -418,6 +414,7 @@ class _LiveMatchContent extends StatelessWidget {
   }
 }
 
+/// A circular button typically used for header icon actions (Notif, Fav, Play).
 class _CircularIconButton extends StatelessWidget {
   final IconData icon;
   final Color color;
@@ -441,6 +438,7 @@ class _CircularIconButton extends StatelessWidget {
   }
 }
 
+/// A standard row displaying team logo, name, and current score/metadata.
 class _TeamRow extends StatelessWidget {
   final String name;
   final String logoUrl;
@@ -478,6 +476,7 @@ class _TeamRow extends StatelessWidget {
   }
 }
 
+/// A stylized button representing betting odds for a specific outcome.
 class _OddsButton extends StatelessWidget {
   final String label;
   final String value;
